@@ -26,13 +26,13 @@
         const quantum = document.getElementById("quantum").value;
         let process_info_object = read_table(processTable);
         const rr=round_robin(process_info_object,quantum);
-        interval_handle=setInterval(() => {
+        interval_handle=setInterval(() => { //500ms마다 작업을 호출하여 간트차트에 그려준다.
           result_draw(rr,interval_handle);
         }, 500);
         
       },false);
     }
-    function add_row(){
+    function add_row(){ //작업 추가용 input table을 그려줌.
       numofjob+=1;
       const processTable = document.getElementById("process-info-table");
       let row = processTable.insertRow(processTable.rows.length);
@@ -58,7 +58,7 @@
       e.target.parentNode.parentNode.remove();
       numofjob--;
     }
-    function read_table(table){
+    function read_table(table){ // input table의 값을 읽어 객체 배열형태로 반환.
       let tableArr = [];
       for(i=0;i<table.rows.length;i++){
         tableArr.push({
