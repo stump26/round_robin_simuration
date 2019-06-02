@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <title>round_robin</title>
+  <link rel="stylesheet" href="main.css"></link>
+  <script>
+    let numofjob=0;
+    let interval_handle=null;
+    window.onload=()=>{
+      add_row();
+      const startBtn=document.getElementById("simu-start");
+      const addBtn = document.getElementById("add-process-info");
+      addBtn.addEventListener("click",add_row,false);
+      addBtn.addEventListener("click",()=>{
+        document.getElementById("delBtn"+numofjob).addEventListener("click",(e)=>{
+          e.preventDefault();
+          del_row(e);
+        },false);
+      },true);//add버블링단계에서 capture del이벤트 추가.
+      startBtn.addEventListener("click",()=>{
+        const processTable = document.getElementById("process-info-table");
+        const gantt = document.getElementById("Gantt");
+        if(gantt.hasChildNodes){
+          gantt.innerHTML="";
+        }
+        const quantum = document.getElementById("quantum").value;
+        let process_info_object = read_table(processTable);
+        const rr=round_robin(process_info_object,quantum);
+        interval_handle=setInterval(() => {
+          result_draw(rr,interval_handle);
+        }, 500);
+        
+      },false);
+    }
+    function add_row(){
+      numofjob+=1;
+      const processTable = document.getElementById("process-info-table");
+      let row = processTable.insertRow(processTable.rows.length);
+      row.setAttribute("id","job"+numofjob)
+      row.innerHTML=`
+        <td>
+          job ${numofjob} : 
+        </td>
+        <td>
+          <input type="text" id="jobName" placeholder="JOB Name" />
+        </td>
+        <td>
+          <input type="text" id="CPUcycle" placeholder="CPU Cycle" />
+        </td>
+        <td>
+          <input type="text" id="arrivalTime" placeholder="Arrival Time"/>
+        </td>
+        <td>
+          <button id="delBtn${numofjob}">X</button>
+        </td>`;
+    }
+    function del_row(e){
+      e.target.parentNode.parentNode.remove();
+      numofjob--;
+    }
+    function read_table(table){
+      let tableArr = [];
+      for(i=0;i<table.rows.length;i++){
+        tableArr.push({
+          jobID:i,
+          jobName:table.rows[i].cells[1].firstChild.nextSibling.value,
+          CPUCycle:table.rows[i].cells[2].firstChild.nextSibling.value,
+          arrivalTime:table.rows[i].cells[3].firstChild.nextSibling.value
+        });
+      }
+      return tableArr;
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h2>Round Robin Simulator</h2>
+
+    <button id="add-process-info" name="add">add</button>
+    <form id="process-data">
+      <table id="process-info-table"></table>
+    </form>
+    <input type="text" id="quantum" placeholder="quantum" />
+    <button id="simu-start" style="display:block">start simulation</button>
+  </header>
+  <div name="main">
+    <div>Gantt chart</div>
+    <div id="Gantt">
+
+    </div>
+  </div>
+  <footer class="result-footer">
+    <table>
+      <tr id="result_job_table">
+        <td>Job: </td>
+      </tr>
+      <tr id="result_Turnaround_table">
+        <td>Turnaround : </td>
+      </tr>
+    </table>
+    <div id="avg_turnaround"></div>
+  </footer>
+  <script src="./round_robin.js"></script>
+</body>
+</html>

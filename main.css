@@ -1,0 +1,30 @@
+#Gantt{
+  margin:10px 2px;
+  width:650px;
+  min-height: 30px;
+  border: 2px solid black;
+  position: absolute;
+}
+.result-footer{
+  margin:20px 10px;
+  width: 650px;
+  height: 80px;
+  position: fixed;
+  bottom:0px;
+  left: 0;
+  border: 3px solid #bbbbbb;
+  background-color: #eeeeee;
+}
+.gantt-tic {
+  border: 1px solid red;
+  display: block;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  float: left;
+  margin-bottom: 20px;
+}
+.time_x{
+  right: -5px;
+  position: absolute;
+}
