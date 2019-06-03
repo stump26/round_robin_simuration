@@ -35,7 +35,7 @@
     function add_row(){ //작업 추가용 input table을 그려줌.
       numofjob+=1;
       const processTable = document.getElementById("process-info-table");
-      let row = processTable.insertRow(processTable.rows.length);
+      let row = processTable.insertRow(processTable.rows.length); 
       row.setAttribute("id","job"+numofjob)
       row.innerHTML=`
         <td>
@@ -75,7 +75,6 @@
 <body>
   <header>
     <h2>Round Robin Simulator</h2>
-
     <button id="add-process-info" name="add">add</button>
     <form id="process-data">
       <table id="process-info-table"></table>

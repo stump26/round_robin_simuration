@@ -40,7 +40,7 @@ function* round_robin(process_info_object,quantum){
       time+=jobTable[i_module].CPUcycle; //남은 작업만큼 time증가
       total_extra -= jobTable[i_module].CPUcycle;
       jobTable[i_module].CPUcycle=0;
-      arrived_job.remove(jobTable[i_module].jobName);
+      arrived_job.pop(jobTable[i_module].jobName);
       rr_result.push({job:jobTable[i_module].jobName,Turnaround:time-jobTable[i_module].arrivalTime});
     }
     if(arrived_job.length===0){ //도착한작업이 없는 경우 시간 흐름.
@@ -61,7 +61,6 @@ function result_draw(rr,interval_handle){
     const avg_turnaround = document.getElementById("avg_turnaround");
     let sum_turnaround = 0;
     job_block.value.map(v=>{ //각 작업마다 turnaround time을 그려주고 turnaround 총합 계산
-      console.log(v);
       result_job_table.innerHTML += `<td>${v.job}</td>`
       result_Turnaround_table.innerHTML += `<td>${v.Turnaround}</td>`
       sum_turnaround+=v.Turnaround;
@@ -69,19 +68,33 @@ function result_draw(rr,interval_handle){
     avg_turnaround.innerHTML = "Average Turnaround : "+sum_turnaround/job_block.value.length + ' ms';
     return;
   }
-  console.log(job_block.value);
+  console.log(job_block);
   const quantum = document.getElementById("quantum").value;
   const gantt = document.getElementById("Gantt");
-gantt.innerHTML+=`
-  <div 
-    class="gantt-tic" 
-    style="width:${15*(job_block.value.to-job_block.value.from)/quantum}%"
-  >
-    ${job_block.value.job}
-    <div class="time_x" style="width:${15*(job_block.value.to-job_block.value.from)/quantum}%">
-      ${job_block.value.to}
-    </div>
-  </div>`;
+  let chart_under_style ="width:"+15*(job_block.value.to-job_block.value.from)/quantum+"%;";
+  let tic_style ="width:"+15*(job_block.value.to-job_block.value.from)/quantum+"%;";
+  let condithional_from="";
+  try{
+    const post_value =gantt.lastElementChild.lastElementChild.innerText;
+    if(Number(post_value)!==job_block.value.from){   
+      tic_style+=`margin-left:50px`;
+      condithional_from=`<div class="time_from">${job_block.value.from}</div>`;
+    }
+  }catch(e){
+    tic_style+=`margin-left:50px`; 
+    condithional_from=`<div class="time_from">${job_block.value.from}</div>`;
+  }
+  gantt.innerHTML+=`
+    <div 
+      class="gantt-tic"
+      style="${tic_style}"
+    >
+      ${condithional_from}
+      ${job_block.value.job}
+      <div class="time_to">
+        ${job_block.value.to}
+      </div>
+    </div>`;
 }
 
 

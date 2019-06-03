@@ -27,7 +27,12 @@
 .gantt-tic-null{
   
 }
-.time_x{
+.time_to{
   right: -5px;
+  position: absolute;
+}
+.time_from{
+  left: -5px;
+  padding-top: 21px;
   position: absolute;
 }
